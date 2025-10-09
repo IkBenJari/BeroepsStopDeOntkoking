@@ -1,0 +1,148 @@
+body {
+    background-image: url('../images/groente-achtergrond.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+    font-family: 'Arial', sans-serif;
+}
+
+header h1 {
+    color: black;
+    background-color: #FFEFC2;
+    text-align: center;
+    padding: 20px;
+    margin: -10px;
+    font-size: 36px;
+    border: black solid 2px;
+    border-radius: 10px;
+    animation: fly-in-top 1s ease-out;
+}
+
+@keyframes fly-in-top {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.inlogscherm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    background: none;
+}
+
+.login-form {
+    background: #FFEFC2;
+    border: 2px solid #222;
+    border-radius: 10px;
+    padding: 28px 32px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 320px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    animation: fade-in 1s ease-out;
+}
+
+.login-form input[type="text"],
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    border: 2px solid #222;
+    border-radius: 10px;
+    font-size: 16px;
+    background: #fff;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="email"]:focus,
+.login-form input[type="password"]:focus {
+    border-color: #001aff;
+}
+
+.login-form input[type="text"]:hover,
+.login-form input[type="email"]:hover,
+.login-form input[type="password"]:hover {
+    border-color: #001aff;
+}
+
+.login-form button {
+    width: 90%;
+    padding: 10px 0;
+    background: #7ed957;
+    color: white;
+    border: none;
+    font-size: 24px;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+    border-radius: 10px;
+}
+
+.login-form button:hover {
+    background: #69c04c;
+    border: black solid 2px;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.password-container {
+    position: relative;
+    width: 110%;
+    margin-bottom: 12px;
+}
+
+.password-container input[type="password"],
+.password-container input[type="text"] {
+    width: 100%;
+    padding-right: 40px;
+    box-sizing: border-box;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 40%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password img {
+    width: 24px;
+    height: 24px;
+    opacity: 0.7;
+}
+#password-strength {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: left;
+    min-height: 18px;
+}

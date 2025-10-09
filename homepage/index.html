@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="../homepage/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Welkom! Maak hier je account aan!</h1>
+    </header>
+    <div class="inlogscherm">
+        <form class="login-form">
+            <h2>Vul hier uw gegevens in...</h2>
+            <input type="text" placeholder="Voornaam" required>
+            <input type="text" placeholder="Achternaam" required>
+            <input type="text" placeholder="Telefoon nummer" required>
+            <input type="email" placeholder="E-mail" required>
+            <div class="password-container">
+                <input type="password" id="password" placeholder="Wachtwoord" required oninput="checkStrength()">
+                <span class="toggle-password" onclick="togglePassword()">
+                    <img src="../images/eye.png" alt="Toon wachtwoord" id="eyeIcon">
+                </span>
+            </div>
+            <div id="password-strength"></div>
+            <button type="submit">Account aanmaken</button>
+        </form>
+    </div>
+    <script src="../homepage/script.js"></script>
+</body>
+
+</html>
