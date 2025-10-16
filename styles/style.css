@@ -87,10 +87,11 @@ header h1 {
     background: #7ed957;
     color: white;
     border: none;
-    font-size: 24px;
+    font-size: 20px;
+    margin-top: -32px;
     font-family: inherit;
     cursor: pointer;
-    margin-top: 8px;
+    
     transition: background 0.2s;
     border-radius: 10px;
 }
