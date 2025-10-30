@@ -4,20 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Log in pagina</title>
     <link rel="stylesheet" href="/styles/style.css">
 </head>
 
 <body>
     <header>
-        <h1>Welkom! Maak hier je account aan!</h1>
+        <h1>Welkom! Log hier in!</h1>
     </header>
     <div class="inlogscherm">
         <form class="login-form">
             <h2>Vul hier uw gegevens in...</h2>
-            <input type="text" placeholder="Voornaam" required>
-            <input type="text" placeholder="Achternaam" required>
-            <input type="text" placeholder="Telefoon nummer" required>
             <input type="email" placeholder="E-mail" required>
             <div class="password-container">
                 <input type="password" id="password" placeholder="Wachtwoord" required oninput="checkStrength()">
@@ -27,7 +24,6 @@
             </div>
             <div id="password-strength"></div>
             <button type="submit">Inloggen</button>
-            <p>Nog geen account?</p><a href="/index.html">Account aanmaken</a>
         </form>
     </div>
     <script src="/scripts/script.js"></script>
