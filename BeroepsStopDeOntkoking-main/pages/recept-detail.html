@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recept Detail - Stop De Ontkoking</title>
+    <link rel="stylesheet" href="../styles/detail.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="user">
+                <img src="../images/unknown-user.png" alt="User pictogram">
+                <p id="username">Gast</p>
+            </div>
+            <a href="homepage.html">Home</a>
+            <a href="javascript:history.back()">← Terug</a>
+            <a href="toevoegen.html">Recept Toevoegen</a>
+            <a href="../index.html">Uitloggen</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="recipe-container" id="recipeContainer">
+            <div class="recipe-header">
+                <img id="recipeImage" src="" alt="Recept foto">
+                <div class="recipe-info">
+                    <h1 id="recipeTitle">Recept Titel</h1>
+                    <div class="recipe-meta">
+                        <span id="recipeTime">⏱️ 0 min</span>
+                        <span id="recipeServings">👥 0 personen</span>
+                        <span id="recipeRating">⭐ 0/5</span>
+                        <span id="recipeDifficulty">📊 Niveau</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="favorite-btn" onclick="toggleFavorite()">❤️ Favoriet</button>
+                        <button class="share-btn" onclick="shareRecipe()">📤 Delen</button>
+                        <button class="print-btn" onclick="printRecipe()">🖨️ Print</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-content">
+                <div class="ingredients-section">
+                    <h2>Ingrediënten</h2>
+                    <div class="servings-adjuster">
+                        <button onclick="adjustServings(-1)">-</button>
+                        <span id="currentServings">2</span>
+                        <button onclick="adjustServings(1)">+</button>
+                        <span>personen</span>
+                    </div>
+                    <ul id="ingredientsList">
+                        <!-- Ingrediënten worden hier geladen -->
+                    </ul>
+                </div>
+
+                <div class="instructions-section">
+                    <h2>Bereidingswijze</h2>
+                    <ol id="instructionsList">
+                        <!-- Instructies worden hier geladen -->
+                    </ol>
+                </div>
+
+                <div class="tips-section">
+                    <h2>Tips & Tricks</h2>
+                    <ul id="tipsList">
+                        <!-- Tips worden hier geladen -->
+                    </ul>
+                </div>
+
+                <div class="nutrition-section">
+                    <h2>Voedingswaarde (per portie)</h2>
+                    <div class="nutrition-grid">
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Calorieën</span>
+                            <span class="nutrition-value">250 kcal</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Eiwitten</span>
+                            <span class="nutrition-value">12g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Koolhydraten</span>
+                            <span class="nutrition-value">35g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Vetten</span>
+                            <span class="nutrition-value">8g</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reviews-section">
+                    <h2>Reviews</h2>
+                    <div class="add-review">
+                        <h3>Voeg je review toe</h3>
+                        <div class="rating-input">
+                            <span onclick="setRating(1)" class="star">⭐</span>
+                            <span onclick="setRating(2)" class="star">⭐</span>
+                            <span onclick="setRating(3)" class="star">⭐</span>
+                            <span onclick="setRating(4)" class="star">⭐</span>
+                            <span onclick="setRating(5)" class="star">⭐</span>
+                        </div>
+                        <textarea id="reviewText" placeholder="Deel je ervaring met dit recept..."></textarea>
+                        <button onclick="submitReview()">Review Toevoegen</button>
+                    </div>
+                    <div id="reviewsList">
+                        <!-- Reviews worden hier getoond -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../scripts/detail.js"></script>
+</body>
+</html>
