@@ -3,7 +3,7 @@ function togglePassword() {
     const eyeIcon = document.getElementById('eyeIcon');
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        eyeIcon.src = '../images/hidden-eye.png'; 
+        eyeIcon.src = '../images/hidden-eye.png';
     } else {
         passwordInput.type = 'password';
         eyeIcon.src = '../images/eye.png';

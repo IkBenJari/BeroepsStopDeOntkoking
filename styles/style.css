@@ -91,7 +91,7 @@ header h1 {
     margin-top: -32px;
     font-family: inherit;
     cursor: pointer;
-    
+
     transition: background 0.2s;
     border-radius: 10px;
 }
@@ -141,6 +141,7 @@ header h1 {
     height: 24px;
     opacity: 0.7;
 }
+
 #password-strength {
     font-size: 20px;
     margin-bottom: 10px;
