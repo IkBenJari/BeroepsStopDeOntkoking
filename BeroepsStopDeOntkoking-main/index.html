@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registreren - Stop De Ontkoking</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Welkom bij Stop De Ontkoking!</h1>
+    </header>
+    <div class="inlogscherm">
+        <form class="login-form" id="registerForm">
+            <h2>Maak hier uw account aan...</h2>
+            <div id="message" class="message"></div>
+            <input type="text" name="voornaam" placeholder="Voornaam" required>
+            <input type="text" name="achternaam" placeholder="Achternaam" required>
+            <input type="tel" name="telefoon" placeholder="Telefoonnummer">
+            <input type="email" name="email" placeholder="E-mail" required>
+            <div class="password-container">
+                <input type="password" name="password" id="password" placeholder="Wachtwoord" required oninput="checkStrength()">
+                <span class="toggle-password" onclick="togglePassword()">
+                    <img src="images/eye.png" alt="Toon wachtwoord" id="eyeIcon">
+                </span>
+            </div>
+            <div id="password-strength"></div>
+            <button type="submit">Registreren</button>
+            <p>Al een account? <a href="pages/inloggen.html">Inloggen</a></p>
+        </form>
+    </div>
+
+    <script src="scripts/script.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const messageDiv = document.getElementById('message');
+            
+            const voornaam = formData.get('voornaam').trim();
+            const achternaam = formData.get('achternaam').trim();
+            const telefoon = formData.get('telefoon').trim();
+            const email = formData.get('email').trim();
+            const password = formData.get('password');
+            
+            // Validatie
+            if (!voornaam || !achternaam || !email || !password) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Alle velden behalve telefoon zijn verplicht!';
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Ongeldig email adres!';
+                return;
+            }
+            
+            if (password.length < 5) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Wachtwoord moet minimaal 5 karakters lang zijn!';
+                return;
+            }
+            
+            // Check of email al bestaat
+            const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const emailExists = existingUsers.some(user => user.email === email);
+            
+            if (emailExists) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Een account met dit email adres bestaat al!';
+                return;
+            }
+            
+            // Nieuwe gebruiker aanmaken
+            const newUser = {
+                id: Date.now().toString(),
+                voornaam: voornaam,
+                achternaam: achternaam,
+                telefoon: telefoon,
+                email: email,
+                password: password, // In een echte app zou dit gehashed worden
+                createdAt: new Date().toISOString(),
+                favorites: []
+            };
+            
+            existingUsers.push(newUser);
+            localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+            
+            // Gebruiker automatisch inloggen
+            localStorage.setItem('currentUser', JSON.stringify({
+                isLoggedIn: true,
+                id: newUser.id,
+                voornaam: newUser.voornaam,
+                achternaam: newUser.achternaam,
+                email: newUser.email,
+                favorites: []
+            }));
+            
+            messageDiv.className = 'message success';
+            messageDiv.textContent = 'Account succesvol aangemaakt! Je wordt doorgestuurd...';
+            
+            setTimeout(() => {
+                window.location.href = 'pages/homepage.html';
+            }, 2000);
+        });
+    </script>
+</body>
+
+</html>

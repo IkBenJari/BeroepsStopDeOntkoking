@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inloggen - Stop De Ontkoking</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Welkom! Log hier in!</h1>
+    </header>
+    <div class="inlogscherm">
+        <form class="login-form" id="loginForm">
+            <h2>Vul hier uw gegevens in...</h2>
+            <div id="message" class="message"></div>
+            <input type="email" name="email" placeholder="E-mail" required>
+            <div class="password-container">
+                <input type="password" name="password" id="password" placeholder="Wachtwoord" required oninput="checkStrength()">
+                <span class="toggle-password" onclick="togglePassword()">
+                    <img src="../images/eye.png" alt="Toon wachtwoord" id="eyeIcon">
+                </span>
+            </div>
+            <div id="password-strength"></div>
+            <button type="submit">Inloggen</button>
+            <p>Nog geen account? <a href="../index.html">Registreren</a></p>
+        </form>
+    </div>
+
+    <script src="../scripts/script.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const messageDiv = document.getElementById('message');
+            
+            const email = formData.get('email').trim();
+            const password = formData.get('password');
+            
+            if (!email || !password) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Vul alle velden in!';
+                return;
+            }
+            
+            // Check gebruikersgegevens
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const user = registeredUsers.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Gebruiker inloggen
+                localStorage.setItem('currentUser', JSON.stringify({
+                    isLoggedIn: true,
+                    id: user.id,
+                    voornaam: user.voornaam,
+                    achternaam: user.achternaam,
+                    email: user.email,
+                    favorites: user.favorites || []
+                }));
+                
+                messageDiv.className = 'message success';
+                messageDiv.textContent = 'Succesvol ingelogd! Je wordt doorgestuurd...';
+                
+                setTimeout(() => {
+                    window.location.href = 'homepage.html';
+                }, 1500);
+            } else {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Onjuiste email of wachtwoord!';
+            }
+        });
+    </script>
+</body>
+
+</html>
