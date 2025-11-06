@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in pagina</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="../styles/style.css">
 </head>
 
 <body>
@@ -13,20 +13,24 @@
         <h1>Welkom! Log hier in!</h1>
     </header>
     <div class="inlogscherm">
-        <form class="login-form">
+        <form class="login-form" id="loginForm">
             <h2>Vul hier uw gegevens in...</h2>
-            <input type="email" placeholder="E-mail" required>
+            <input type="email" id="email" name="email" placeholder="E-mail" required>
             <div class="password-container">
-                <input type="password" id="password" placeholder="Wachtwoord" required oninput="checkStrength()">
+                <input type="password" id="password" name="wachtwoord" placeholder="Wachtwoord" required oninput="checkStrength()">
                 <span class="toggle-password" onclick="togglePassword()">
-                    <img src="/images/eye.png" alt="Toon wachtwoord" id="eyeIcon">
+                    <img src="../images/eye.png" alt="Toon wachtwoord" id="eyeIcon">
                 </span>
             </div>
             <div id="password-strength"></div>
             <button type="submit">Inloggen</button>
+            <div id="message" style="margin-top: 15px; min-height: 20px; text-align: center; font-weight: bold;"></div>
+            <p>Nog geen account?</p><a href="../index.html">Registreren</a>
         </form>
     </div>
-    <script src="/scripts/script.js"></script>
+    <script src="../scripts/storage.js"></script>
+    <script src="../scripts/api-local.js"></script>
+    <script src="../scripts/script.js"></script>
 </body>
 
 </html>

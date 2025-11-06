@@ -13,23 +13,27 @@
         <h1>Welkom! Maak hier je account aan!</h1>
     </header>
     <div class="inlogscherm">
-        <form class="login-form">
+        <form class="login-form" id="registerForm">
             <h2>Vul hier uw gegevens in...</h2>
-            <input type="text" placeholder="Voornaam" required>
-            <input type="text" placeholder="Achternaam" required>
-            <input type="text" placeholder="Telefoon nummer" required>
-            <input type="email" placeholder="E-mail" required>
+            <input type="text" id="voornaam" name="voornaam" placeholder="Voornaam" required>
+            <input type="text" id="achternaam" name="achternaam" placeholder="Achternaam" required>
+            <input type="text" id="telefoon" name="telefoon" placeholder="Telefoon nummer" required>
+            <input type="email" id="email" name="email" placeholder="E-mail" required>
             <div class="password-container">
-                <input type="password" id="password" placeholder="Wachtwoord" required oninput="checkStrength()">
+                <input type="password" id="password" name="wachtwoord" placeholder="Wachtwoord" required
+                    oninput="checkStrength()">
                 <span class="toggle-password" onclick="togglePassword()">
                     <img src="images/eye.png" alt="Toon wachtwoord" id="eyeIcon">
                 </span>
             </div>
             <div id="password-strength"></div>
             <button type="submit">Account aanmaken</button>
+            <div id="message" style="margin-top: 15px; min-height: 20px; text-align: center; font-weight: bold;"></div>
             <p>Heb je al een account?</p><a href="pages/inloggen.html">Inloggen</a>
         </form>
     </div>
+    <script src="scripts/storage.js"></script>
+    <script src="scripts/api-local.js"></script>
     <script src="scripts/script.js"></script>
 </body>
 

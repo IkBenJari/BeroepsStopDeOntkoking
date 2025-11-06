@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Recepten Overzicht</title>
     <link rel="stylesheet" href="../styles/homepage.css">
+    <link rel="stylesheet" href="../styles/overzicht.css">
 </head>
 <body>
     <header>
@@ -23,36 +24,25 @@
         <a href="#" onclick="logout()">Uitloggen</a>
     </header>
 
-    <div class="image-with-text main-image">
-        <img src="../images/gezond-recept.jpg" alt="Gezond eten">
-        <div class="overlay-top">Eet Gezond</div>
+    <div class="filter-section">
+        <h2>Filters</h2>
+        <div class="filter-group">
+            <label for="categorieFilter">Categorie:</label>
+            <select id="categorieFilter" onchange="applyFilters()">
+                <option value="">Alle categorieën</option>
+                <option value="Ontbijt">Ontbijt</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Drankjes">Drankjes</option>
+            </select>
+        </div>
     </div>
 
-    <div class="image-row">
-        <a href="overzicht.html?categorie=Ontbijt" class="image-with-text">
-            <img src="../images/Pancake.jpg" alt="Pancake">
-            <div class="overlay-center">Ontbijt</div>
-        </a>
-
-        <a href="overzicht.html?categorie=Drankjes" class="image-with-text">
-            <img src="../images/citroen-munt-drankje.webp" alt="citroen munt drankje">
-            <div class="overlay-center">Drankjes</div>
-        </a>
-
-        <a href="overzicht.html?categorie=Snacks" class="image-with-text">
-            <img src="../images/gezonde-wrap-rolletjes.jpg" alt="gezonde wrap rolletjes">
-            <div class="overlay-center">Snacks</div>
-        </a>
-    </div>
-
-    <div class="recent-recepten">
-        <h2>Recente Recepten</h2>
-        <div id="recentRecepten" class="recepten-grid"></div>
-    </div>
+    <div id="receptenContainer" class="recepten-grid"></div>
 
     <script src="../scripts/storage.js"></script>
     <script src="../scripts/api-local.js"></script>
     <script src="../scripts/script.js"></script>
-    <script src="../scripts/homepage.js"></script>
+    <script src="../scripts/overzicht.js"></script>
 </body>
 </html>
+

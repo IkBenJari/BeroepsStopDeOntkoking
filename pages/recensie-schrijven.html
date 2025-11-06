@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recensie Schrijven</title>
+    <link rel="stylesheet" href="../styles/homepage.css">
+    <link rel="stylesheet" href="../styles/recensie.css">
+</head>
+<body>
+    <header>
+        <div class="user">
+            <img src="../images/unknown-user.png" alt="User pictogram">
+            <p>Gast</p>
+        </div>
+        <a href="homepage.html">Home</a>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Zoek hier..." class="search-input">
+            <button class="search-button" onclick="performSearch()">Zoek</button>
+        </div>
+        <a href="recept-toevoegen.html">Recept Toevoegen</a>
+        <a href="admin.html" id="adminLink" style="display: none;">Admin</a>
+        <a href="#" onclick="logout()">Uitloggen</a>
+    </header>
+
+    <div class="recensie-container">
+        <h1>Recensie Schrijven</h1>
+        <div id="message"></div>
+
+        <form id="recensieForm">
+            <div class="form-group">
+                <label for="receptSelect">Selecteer Recept *</label>
+                <select id="receptSelect" name="recept_id" required>
+                    <option value="">Selecteer een recept...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="beoordeling">Beoordeling *</label>
+                <div class="rating-container">
+                    <input type="radio" id="star5" name="beoordeling" value="5" required>
+                    <label for="star5" class="star">★</label>
+                    <input type="radio" id="star4" name="beoordeling" value="4" required>
+                    <label for="star4" class="star">★</label>
+                    <input type="radio" id="star3" name="beoordeling" value="3" required>
+                    <label for="star3" class="star">★</label>
+                    <input type="radio" id="star2" name="beoordeling" value="2" required>
+                    <label for="star2" class="star">★</label>
+                    <input type="radio" id="star1" name="beoordeling" value="1" required>
+                    <label for="star1" class="star">★</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="titel">Titel van je recensie *</label>
+                <input type="text" id="titel" name="titel" placeholder="Bijv: Heerlijk recept!" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tekst">Je recensie *</label>
+                <textarea id="tekst" name="tekst" rows="8" required
+                    placeholder="Deel je ervaring met dit recept..."></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Recensie Plaatsen</button>
+                <a href="homepage.html" class="btn btn-secondary">Annuleren</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../scripts/storage.js"></script>
+    <script src="../scripts/api-local.js"></script>
+    <script src="../scripts/script.js"></script>
+    <script src="../scripts/recensie.js"></script>
+</body>
+</html>
+

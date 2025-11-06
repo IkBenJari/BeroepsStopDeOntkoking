@@ -127,19 +127,28 @@ header h1 {
 .toggle-password {
     position: absolute;
     right: 12px;
-    top: 40%;
+    top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     height: 24px;
     width: 24px;
     display: flex;
     align-items: center;
+    z-index: 10;
+    pointer-events: auto;
 }
 
 .toggle-password img {
     width: 24px;
     height: 24px;
     opacity: 0.7;
+    display: block;
+    pointer-events: none;
+}
+
+/* Ensure only one eye icon is visible - hide any duplicates */
+.password-container .toggle-password:not(:first-of-type) {
+    display: none !important;
 }
 
 #password-strength {

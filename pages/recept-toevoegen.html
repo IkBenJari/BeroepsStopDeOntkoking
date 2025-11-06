@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recept Toevoegen</title>
+    <link rel="stylesheet" href="../styles/homepage.css">
+    <link rel="stylesheet" href="../styles/recept-toevoegen.css">
+</head>
+<body>
+    <header>
+        <div class="user">
+            <img src="../images/unknown-user.png" alt="User pictogram">
+            <p>Gast</p>
+        </div>
+        <a href="homepage.html">Home</a>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Zoek hier..." class="search-input">
+            <button class="search-button" onclick="performSearch()">Zoek</button>
+        </div>
+        <a href="recept-toevoegen.html">Recept Toevoegen</a>
+        <a href="recensie-schrijven.html">Recensie Schrijven</a>
+        <a href="admin.html" id="adminLink" style="display: none;">Admin</a>
+        <a href="#" onclick="logout()">Uitloggen</a>
+    </header>
+
+    <div class="recept-form-container">
+        <h1 id="formTitle">Recept Toevoegen</h1>
+        <div id="message"></div>
+
+        <form id="receptForm">
+            <div class="form-group">
+                <label for="titel">Titel *</label>
+                <input type="text" id="titel" name="titel" required>
+            </div>
+
+            <div class="form-group">
+                <label for="beschrijving">Beschrijving</label>
+                <textarea id="beschrijving" name="beschrijving" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="categorie">Categorie *</label>
+                <select id="categorie" name="categorie" required>
+                    <option value="">Selecteer categorie</option>
+                    <option value="Ontbijt">Ontbijt</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Drankjes">Drankjes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ingrediënten">Ingrediënten *</label>
+                <textarea id="ingrediënten" name="ingrediënten" class="large" required
+                    placeholder="Voer elk ingrediënt op een nieuwe regel in, bijvoorbeeld:&#10;2 eieren&#10;200g bloem&#10;1 theelepel zout"></textarea>
+                <div class="help-text">Voer elk ingrediënt op een nieuwe regel in</div>
+            </div>
+
+            <div class="form-group">
+                <label for="instructies">Instructies *</label>
+                <textarea id="instructies" name="instructies" class="large" required
+                    placeholder="Voer elke stap op een nieuwe regel in, bijvoorbeeld:&#10;Verwarm de oven voor op 180 graden&#10;Meng de ingrediënten in een kom&#10;Bak gedurende 25 minuten"></textarea>
+                <div class="help-text">Voer elke stap op een nieuwe regel in</div>
+            </div>
+
+            <div class="form-group">
+                <label for="afbeelding_file">Afbeelding uploaden (optioneel)</label>
+                <input type="file" id="afbeelding_file" name="afbeelding_file" accept="image/*">
+                <div class="help-text">Selecteer een afbeelding van je computer</div>
+                <div id="imagePreview" style="margin-top: 10px; display: none;">
+                    <img id="previewImage" src="" alt="Preview" style="max-width: 300px; max-height: 200px; border-radius: 5px; border: 2px solid #222;">
+                </div>
+                <input type="hidden" id="afbeelding_url" name="afbeelding_url">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="submitBtn">Opslaan</button>
+                <a href="homepage.html" class="btn btn-secondary">Annuleren</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../scripts/storage.js"></script>
+    <script src="../scripts/api-local.js"></script>
+    <script src="../scripts/script.js"></script>
+    <script src="../scripts/recept-toevoegen.js"></script>
+</body>
+</html>
+

@@ -181,3 +181,60 @@ header a:hover {
     /* klein hover-effect */
     transition: transform 0.3s;
 }
+
+.recent-recepten {
+    width: 70%;
+    margin: 40px auto;
+}
+
+.recent-recepten h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.recepten-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.recept-card {
+    background: #FFEFC2;
+    border: 2px solid #222;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.recept-card:hover {
+    transform: scale(1.03);
+}
+
+.recept-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.recept-card-content {
+    padding: 15px;
+}
+
+.recept-card-content h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.recept-categorie {
+    color: #666;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.recept-auteur {
+    color: #888;
+    font-size: 12px;
+    margin: 5px 0;
+}
