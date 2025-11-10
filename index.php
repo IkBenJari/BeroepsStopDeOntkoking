@@ -1,26 +1,38 @@
+<?php
+require_once __DIR__ . '/backend/functions_auth.php';
+$current_user = current_user();
+?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage - Stop De Ontkoking</title>
-    <link rel="stylesheet" href="../styles/homepage.css">
+    <title>Stop De Ontkoking - Inspiratie voor Generatie Z</title>
+    <link rel="stylesheet" href="styles/homepage.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="user">
-                <img src="../images/unknown-user.png" alt="User pictogram">
-                <p id="username">Gast</p>
+                <img src="images/unknown-user.png" alt="User pictogram">
+                <?php if ($current_user): ?>
+                    <p><?php echo htmlspecialchars($current_user['username']); ?></p>
+                <?php else: ?>
+                    <p>Gast</p>
+                <?php endif; ?>
             </div>
-            <a href="homepage.html">Home</a>
+            <a href="index.php">Home</a>
             <div class="search-container">
                 <input type="text" placeholder="Zoek recepten..." class="search-input" id="searchInput">
                 <button class="search-button" onclick="searchAllRecipes()">Zoek</button>
             </div>
-            <a href="toevoegen.html">Recept Toevoegen</a>
-            <a href="mijn-recepten.html">Mijn Recepten</a>
-            <a href="../index.html">Uitloggen</a>
+            <a href="pages/ontbijt.html">Recepten</a>
+            <?php if ($current_user): ?>
+                <a href="pages/toevoegen.html" class="add-recipe-btn">Recept Toevoegen</a>
+                <a href="backend/logout.php" class="logout-btn">Uitloggen</a>
+            <?php else: ?>
+                <a href="backend/login.php" class="admin-login-btn">Inloggen / Beheer</a>
+            <?php endif; ?>
         </nav>
     </header>
 
@@ -32,7 +44,7 @@
                 <button class="cta-button" onclick="scrollToCategories()">Begin met Koken 🍳</button>
             </div>
             <div class="hero-image">
-                <img src="../images/gezond-recept.jpg" alt="Gezond eten">
+                <img src="images/gezond-recept.jpg" alt="Gezond eten">
             </div>
         </div>
 
@@ -56,48 +68,48 @@
             <p>Van ontbijt tot diner, van snacks tot drankjes - wij hebben het allemaal!</p>
             
             <div class="categories-grid">
-                <a href="ontbijt.html" class="category-card">
-                    <img src="../images/Pancake.jpg" alt="Ontbijt">
+                <a href="pages/ontbijt.html" class="category-card">
+                    <img src="images/Pancake.jpg" alt="Ontbijt">
                     <div class="category-overlay">
                         <h3>Ontbijt</h3>
                         <p>Start je dag goed</p>
                     </div>
                 </a>
 
-                <a href="drankjes.html" class="category-card">
-                    <img src="../images/citroen-munt-drankje.webp" alt="Drankjes">
+                <a href="pages/drankjes.html" class="category-card">
+                    <img src="images/citroen-munt-drankje.webp" alt="Drankjes">
                     <div class="category-overlay">
                         <h3>Drankjes</h3>
                         <p>Verfrissend & gezond</p>
                     </div>
                 </a>
 
-                <a href="snacks.html" class="category-card">
-                    <img src="../images/gezonde-wrap-rolletjes.jpg" alt="Snacks">
+                <a href="pages/snacks.html" class="category-card">
+                    <img src="images/groente-achtergrond.jpg" alt="Snacks">
                     <div class="category-overlay">
                         <h3>Snacks</h3>
                         <p>Gezond tussendoortje</p>
                     </div>
                 </a>
 
-                <a href="ontbijt.html" class="category-card">
-                    <img src="../images/groente-achtergrond.jpg" alt="Lunch">
+                <a href="pages/ontbijt.html" class="category-card">
+                    <img src="images/groente-achtergrond.jpg" alt="Lunch">
                     <div class="category-overlay">
                         <h3>Lunch</h3>
                         <p>Voedzame middagmaaltijd</p>
                     </div>
                 </a>
 
-                <a href="ontbijt.html" class="category-card">
-                    <img src="../images/gezond-recept.jpg" alt="Diner">
+                <a href="pages/ontbijt.html" class="category-card">
+                    <img src="images/gezond-recept.jpg" alt="Diner">
                     <div class="category-overlay">
                         <h3>Diner</h3>
                         <p>Heerlijke avondmaaltijd</p>
                     </div>
                 </a>
 
-                <a href="ontbijt.html" class="category-card">
-                    <img src="../images/Pancake.jpg" alt="Dessert">
+                <a href="pages/ontbijt.html" class="category-card">
+                    <img src="images/Pancake.jpg" alt="Dessert">
                     <div class="category-overlay">
                         <h3>Dessert</h3>
                         <p>Zoete afsluiting</p>
@@ -148,44 +160,34 @@
             </div>
             <div class="footer-section">
                 <h3>Links</h3>
-                <a href="homepage.html">Home</a>
-                <a href="toevoegen.html">Recept Toevoegen</a>
-                <a href="contact.html">Contact</a>
+                <a href="index.php">Home</a>
+                <a href="pages/ontbijt.html">Recepten</a>
+                <a href="backend/login.php">Beheer</a>
             </div>
             <div class="footer-section">
                 <h3>Categorieën</h3>
-                <a href="ontbijt.html">Ontbijt</a>
-                <a href="drankjes.html">Drankjes</a>
-                <a href="snacks.html">Snacks</a>
+                <a href="pages/ontbijt.html">Ontbijt</a>
+                <a href="pages/drankjes.html">Drankjes</a>
+                <a href="pages/snacks.html">Snacks</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 GLR Food Freaks - Team OJN. Alle rechten voorbehouden.</p>
+            <p>&copy; 2025 GLR Food Freaks - Team OJN. Alle rechten voorbehouden.</p>
         </div>
     </footer>
 
     <script>
-        // Laad gebruiker data
         document.addEventListener('DOMContentLoaded', function() {
-            loadUserData();
             loadFeaturedRecipes();
             updateRecipeCount();
         });
 
-        function loadUserData() {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                const user = JSON.parse(savedUser);
-                document.getElementById('username').textContent = user.voornaam || 'Gast';
-            }
-        }
-
         function loadFeaturedRecipes() {
             const featuredContainer = document.getElementById('featuredRecipes');
             const featuredRecipes = [
-                { id: 'pancakes', title: 'Fluffy Pancakes', image: '../images/Pancake.jpg', rating: '4.5/5' },
-                { id: 'acai-bowl', title: 'Acai Bowl', image: '../images/gezond-recept.jpg', rating: '4.8/5' },
-                { id: 'citroen-munt', title: 'Citroen Munt Water', image: '../images/citroen-munt-drankje.webp', rating: '4.7/5' }
+                { id: 'pancakes', title: 'Fluffy Pancakes', image: 'images/Pancake.jpg', rating: '4.5/5' },
+                { id: 'acai-bowl', title: 'Acai Bowl', image: 'images/gezond-recept.jpg', rating: '4.8/5' },
+                { id: 'citroen-munt', title: 'Citroen Munt Water', image: 'images/citroen-munt-drankje.webp', rating: '4.7/5' }
             ];
 
             featuredContainer.innerHTML = '';
@@ -205,9 +207,8 @@
         }
 
         function updateRecipeCount() {
-            const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
-            const totalCount = 15 + userRecipes.length; // Base recipes + user recipes
-            document.getElementById('totalRecipes').textContent = totalCount + '+';
+            // Voor publieke pagina tonen we een vast aantal
+            document.getElementById('totalRecipes').textContent = '50+';
         }
 
         function scrollToCategories() {
@@ -219,15 +220,14 @@
         function searchAllRecipes() {
             const searchTerm = document.getElementById('searchInput').value.trim();
             if (searchTerm) {
-                // Ga naar ontbijt pagina met zoekterm
                 localStorage.setItem('searchTerm', searchTerm);
-                window.location.href = 'ontbijt.html';
+                window.location.href = 'pages/ontbijt.html';
             }
         }
 
         function viewRecipe(recipeId) {
             localStorage.setItem('selectedRecipe', recipeId);
-            window.location.href = 'recept-detail.html';
+            window.location.href = 'pages/recept-detail.html';
         }
     </script>
 </body>

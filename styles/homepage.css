@@ -1,69 +1,107 @@
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
-    padding-top: 80px;
-    /* pas dit aan naar de hoogte van je header */
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 50%, #e17055 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #333;
+    padding-top: 80px;
+}
 
+/* Navigation */
 header {
     position: fixed;
-    /* maakt header vast */
     top: 0;
-    /* bovenaan de pagina */
     left: 0;
-    /* helemaal links */
     width: 100%;
-    /* header vult de hele breedte */
-    background-color: #FFEFC2;
-    display: flex;
-    align-items: center;
-    padding: 20px 20px;
-    gap: 50px;
-    box-sizing: border-box;
+    background: rgba(255, 239, 194, 0.95);
+    backdrop-filter: blur(10px);
     z-index: 1000;
-    /* zorgt dat header boven alles blijft */
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    gap: 2rem;
+}
 
 .user {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
 }
 
 .user img {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
+    border: 2px solid #333;
 }
 
 .user p {
     margin: 0;
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
 }
 
-header a {
+.navbar a {
     text-decoration: none;
     color: #333;
-    font-size: 20px;
-    padding: 8px 12px;
-    border-radius: 4px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
 }
 
-header a:hover {
-    text-decoration: underline;
-    background-color: rgba(255, 255, 255, 0.3);
+.navbar a:hover {
+    background: #fdcb6e;
+    color: white;
+    transform: translateY(-2px);
 }
 
-/* Zoekbalk */
+.navbar .admin-login-btn.active {
+    background: linear-gradient(135deg, #fdcb6e, #e17055);
+    color: white;
+    box-shadow: 0 4px 15px rgba(253, 203, 110, 0.3);
+}
+
+.navbar .add-recipe-btn {
+    background: linear-gradient(135deg, #00b894, #00a085);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+}
+
+.navbar .logout-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.navbar .add-recipe-btn:hover,
+.navbar .logout-btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+/* Search container */
 .search-container {
     display: flex;
-    border: 2px solid #ccc;
+    border: 2px solid #333;
     border-radius: 25px;
     overflow: hidden;
     background-color: #fff;
     flex: 1;
+    max-width: 400px;
 }
 
 .search-input {
@@ -75,166 +113,374 @@ header a:hover {
 }
 
 .search-button {
-    background-color: #007bff;
+    background: #fdcb6e;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 10px 20px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .search-button:hover {
-    background-color: #0056b3;
+    background: #e17055;
 }
 
-/* Hoofdafbeelding */
-.main-image {
-    position: relative;
+/* Main content */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Hero Section */
+.hero-section {
     display: flex;
-    justify-content: center;
-    margin: 40px auto;
-    width: 70%;
-    border-radius: 10px;
-    overflow: hidden;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 3rem;
+    color: white;
 }
 
-.image-with-text {
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
+.hero-content {
+    flex: 1;
 }
 
-.image-with-text img {
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(45deg, #fff, #f0f0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-content p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.cta-button {
+    background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(253, 203, 110, 0.4);
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(253, 203, 110, 0.6);
+}
+
+.hero-image {
+    flex: 1;
+}
+
+.hero-image img {
     width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 10px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* Overlay voor grote afbeelding bovenaan */
-.overlay-top {
-    position: absolute;
-    top: 10%;
-    /* bovenaan */
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 50px;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    padding: 10px;
-}
-
-/* Overlay voor kleine afbeeldingen in het midden */
-.overlay-center {
-    position: absolute;
-    top: 50%;
-    /* midden verticaal */
-    left: 50%;
-    /* midden horizontaal */
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 40px;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-    padding: 10px;
-    text-align: center;
-}
-
-.image-row {
+/* Stats Section */
+.stats-section {
     display: flex;
-    /* flexbox blijft actief */
-    justify-content: space-between;
-    width: 70%;
-    /* zelfde breedte als grote afbeelding */
-    margin: 40px auto;
-    /* gecentreerd onder de grote afbeelding */
-    gap: 20px;
-    /* ruimte tussen de afbeeldingen */
+    justify-content: space-around;
+    margin-bottom: 4rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
 }
 
-.image-row .image-with-text {
-    display: block;
-    /* zorgt dat <a> als blok werkt */
-    width: 32%;
-    /* 3 afbeeldingen + gap = 70% container */
+.stat-item {
+    text-align: center;
+    color: white;
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #fff9c4;
+}
+
+.stat-item p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Categories Section */
+.categories-section {
+    margin-bottom: 4rem;
+}
+
+.categories-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.categories-section p {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    color: white;
+    opacity: 0.9;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.category-card {
     position: relative;
-    border-radius: 10px;
+    border-radius: 15px;
     overflow: hidden;
+    transition: all 0.3s ease;
     text-decoration: none;
-    /* verwijdert onderstreping van <a> */
-    color: inherit;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.image-row .image-with-text img {
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.category-card img {
     width: 100%;
     height: 250px;
-    /* vaste hoogte voor gelijke grootte */
     object-fit: cover;
-    display: block;
-    border-radius: 10px;
 }
 
-.image-row .image-with-text:hover {
-    transform: scale(1.03);
-    /* klein hover-effect */
-    transition: transform 0.3s;
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    padding: 2rem;
 }
 
-.recent-recepten {
-    width: 70%;
-    margin: 40px auto;
+.category-overlay h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
-.recent-recepten h2 {
+.category-overlay p {
+    opacity: 0.9;
+}
+
+/* Featured Section */
+.featured-section {
+    margin-bottom: 4rem;
+}
+
+.featured-section h2 {
     text-align: center;
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.recepten-grid {
+.featured-recipes {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
 }
 
-.recept-card {
-    background: #FFEFC2;
-    border: 2px solid #222;
-    border-radius: 10px;
+.featured-recipe-card {
+    background: white;
+    border-radius: 15px;
     overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.3s;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
-.recept-card:hover {
-    transform: scale(1.03);
+.featured-recipe-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-.recept-card img {
+.featured-recipe-card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
 }
 
-.recept-card-content {
-    padding: 15px;
+.recipe-info {
+    padding: 1.5rem;
 }
 
-.recept-card-content h3 {
-    margin: 0 0 10px 0;
-    color: #333;
+.recipe-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
-.recept-categorie {
+.recipe-info p {
     color: #666;
-    font-size: 14px;
-    margin: 5px 0;
+    margin-bottom: 1rem;
 }
 
-.recept-auteur {
-    color: #888;
-    font-size: 12px;
-    margin: 5px 0;
+.recipe-info button {
+    width: 100%;
+    background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
+
+.recipe-info button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(253, 203, 110, 0.4);
+}
+
+/* Tips Section */
+.tips-section {
+    margin-bottom: 4rem;
+}
+
+.tips-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.tip-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.tip-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.tip-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.tip-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #fff9c4;
+}
+
+.tip-card p {
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+/* Footer */
+footer {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2rem 0;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+}
+
+.footer-section h3 {
+    margin-bottom: 1rem;
+    color: #fff9c4;
+}
+
+.footer-section a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #fff9c4;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 2rem;
+    opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .search-container {
+        max-width: none;
+    }
+
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .stats-section {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .categories-grid,
+    .featured-recipes,
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
