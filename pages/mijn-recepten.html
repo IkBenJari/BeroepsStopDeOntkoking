@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Recepten - Stop De Ontkoking</title>
+    <link rel="stylesheet" href="../styles/recepten.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="user">
+                <img src="../images/unknown-user.png" alt="User pictogram">
+                <p id="username">Gast</p>
+            </div>
+            <a href="homepage.html">Home</a>
+            <div class="search-container">
+                <input type="text" placeholder="Zoek recepten..." class="search-input">
+                <button class="search-button">Zoek</button>
+            </div>
+            <a href="toevoegen.html">Recept Toevoegen</a>
+            <a href="mijn-recepten.html">Mijn Recepten</a>
+            <a href="../index.html">Uitloggen</a>
+        </nav>
+    </header>
+
+    <main>
+        <div id="loginRequired" class="login-required" style="display: none;">
+            <h2>🔒 Inloggen Vereist</h2>
+            <p>Je moet ingelogd zijn om je recepten en favorieten te bekijken.</p>
+            <a href="../backend/login.php">Inloggen</a>
+            <a href="../index.html">Registreren</a>
+        </div>
+
+        <div id="myRecipesContainer" style="display: none;">
+            <div class="page-header">
+                <h1>Mijn Recepten</h1>
+                <p>Jouw toegevoegde recepten en favorieten</p>
+            </div>
+
+            <div class="filter-section">
+                <button class="filter-btn active" onclick="showTab('my-recipes')">Mijn Recepten</button>
+                <button class="filter-btn" onclick="showTab('favorites')">Favorieten</button>
+            </div>
+
+            <div id="my-recipes-tab">
+                <div class="section-header">
+                    <h2 style="color: white; text-align: center; margin-bottom: 2rem;">Door mij toegevoegde recepten</h2>
+                </div>
+                <div class="recipes-grid" id="myRecipesGrid">
+                    <!-- Mijn recepten worden hier geladen -->
+                </div>
+            </div>
+
+            <div id="favorites-tab" style="display: none;">
+                <div class="section-header">
+                    <h2 style="color: white; text-align: center; margin-bottom: 2rem;">Mijn favoriete recepten</h2>
+                </div>
+                <div class="recipes-grid" id="favoritesGrid">
+                    <!-- Favorieten worden hier geladen -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .login-required {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            color: white;
+        }
+
+        .login-required h2 {
+            margin-bottom: 1rem;
+            color: #fff9c4;
+        }
+
+        .login-required a {
+            display: inline-block;
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .login-required a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(253, 203, 110, 0.6);
+        }
+
+        .empty-state {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem auto;
+            color: white;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #fff9c4;
+        }
+
+        .empty-state a {
+            display: inline-block;
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .empty-state a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(253, 203, 110, 0.6);
+        }
+
+        .recipe-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+    </style>
+
+    <script>
+        let currentUser = null;
+
+        // Check of gebruiker ingelogd is
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUser = localStorage.getItem('currentUser');
+            
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                if (user.isLoggedIn) {
+                    currentUser = user;
+                    document.getElementById('username').textContent = user.voornaam || 'Gast';
+                    document.getElementById('myRecipesContainer').style.display = 'block';
+                    document.getElementById('loginRequired').style.display = 'none';
+                    loadMyRecipes();
+                    loadFavorites();
+                } else {
+                    showLoginRequired();
+                }
+            } else {
+                showLoginRequired();
+            }
+        });
+
+        function showLoginRequired() {
+            document.getElementById('myRecipesContainer').style.display = 'none';
+            document.getElementById('loginRequired').style.display = 'block';
+        }
+
+        function showTab(tabName) {
+            // Verberg alle tabs
+            document.getElementById('my-recipes-tab').style.display = 'none';
+            document.getElementById('favorites-tab').style.display = 'none';
+            
+            // Verwijder active class van alle buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Toon geselecteerde tab
+            if (tabName === 'my-recipes') {
+                document.getElementById('my-recipes-tab').style.display = 'block';
+                document.querySelector('.filter-btn[onclick="showTab(\'my-recipes\')"]').classList.add('active');
+            } else if (tabName === 'favorites') {
+                document.getElementById('favorites-tab').style.display = 'block';
+                document.querySelector('.filter-btn[onclick="showTab(\'favorites\')"]').classList.add('active');
+            }
+        }
+
+        function loadMyRecipes() {
+            const myRecipesGrid = document.getElementById('myRecipesGrid');
+            const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
+            const myRecipes = userRecipes.filter(recipe => recipe.authorId === currentUser.id);
+
+            if (myRecipes.length === 0) {
+                myRecipesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Nog geen recepten toegevoegd</h3>
+                        <p>Begin met het toevoegen van je eerste recept!</p>
+                        <a href="toevoegen.html">Recept Toevoegen</a>
+                    </div>
+                `;
+                return;
+            }
+
+            myRecipesGrid.innerHTML = '';
+            myRecipes.forEach(recipe => {
+                const recipeCard = createRecipeCard(recipe, true);
+                myRecipesGrid.appendChild(recipeCard);
+            });
+        }
+
+        function loadFavorites() {
+            const favoritesGrid = document.getElementById('favoritesGrid');
+            const userFavorites = currentUser.favorites || [];
+
+            if (userFavorites.length === 0) {
+                favoritesGrid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Nog geen favorieten</h3>
+                        <p>Voeg recepten toe aan je favorieten door op het hartje te klikken!</p>
+                        <a href="ontbijt.html">Recepten Bekijken</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Load alle recepten om favorieten details te krijgen
+            const allRecipes = getAllRecipes();
+            const favoriteRecipes = allRecipes.filter(recipe => userFavorites.includes(recipe.id));
+
+            favoritesGrid.innerHTML = '';
+            favoriteRecipes.forEach(recipe => {
+                const recipeCard = createRecipeCard(recipe, false, true);
+                favoritesGrid.appendChild(recipeCard);
+            });
+        }
+
+        function createRecipeCard(recipe, showDelete = false, isFavorite = false) {
+            const card = document.createElement('div');
+            card.className = 'recipe-card';
+            
+            card.innerHTML = `
+                <img src="${recipe.image}" alt="${recipe.title}">
+                <div class="recipe-info">
+                    <h3>${recipe.title}</h3>
+                    <p>${recipe.description}</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ ${recipe.time}</span>
+                        <span>👥 ${recipe.servings}</span>
+                        <span>⭐ ${recipe.rating}</span>
+                    </div>
+                    <div class="recipe-actions">
+                        <button class="view-recipe-btn" onclick="viewRecipe('${recipe.id}')">Bekijk Recept</button>
+                        ${showDelete ? `<button class="delete-btn" onclick="deleteRecipe('${recipe.id}')">Verwijderen</button>` : ''}
+                        ${isFavorite ? `<button class="favorite-btn favorited" onclick="removeFavorite('${recipe.id}')">❤️</button>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function deleteRecipe(recipeId) {
+            if (confirm('Weet je zeker dat je dit recept wilt verwijderen?')) {
+                let userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
+                userRecipes = userRecipes.filter(recipe => recipe.id !== recipeId);
+                localStorage.setItem('userRecipes', JSON.stringify(userRecipes));
+                loadMyRecipes();
+            }
+        }
+
+        function removeFavorite(recipeId) {
+            if (currentUser.favorites) {
+                currentUser.favorites = currentUser.favorites.filter(id => id !== recipeId);
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Update in registeredUsers ook
+                const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const userIndex = registeredUsers.findIndex(user => user.id === currentUser.id);
+                if (userIndex !== -1) {
+                    registeredUsers[userIndex].favorites = currentUser.favorites;
+                    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+                }
+                
+                loadFavorites();
+            }
+        }
+
+        function viewRecipe(recipeId) {
+            localStorage.setItem('selectedRecipe', recipeId);
+            window.location.href = 'recept-detail.html';
+        }
+
+        function getAllRecipes() {
+            // Hier zou je alle recepten uit verschillende bronnen combineren
+            const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
+            
+            // Voeg default recepten toe
+            const defaultRecipes = [
+                {
+                    id: 'pancakes',
+                    title: 'Fluffy Pancakes',
+                    description: 'Heerlijk luchtige pannenkoeken perfect voor ontbijt',
+                    image: '../images/Pancake.jpg',
+                    category: 'ontbijt',
+                    time: '20 min',
+                    servings: '4 personen',
+                    difficulty: 'Makkelijk',
+                    rating: '4.5/5'
+                },
+                {
+                    id: 'acai-bowl',
+                    title: 'Acai Bowl',
+                    description: 'Gezonde en voedzame acai bowl vol antioxidanten',
+                    image: '../images/gezond-recept.jpg',
+                    category: 'ontbijt',
+                    time: '10 min',
+                    servings: '2 personen',
+                    difficulty: 'Zeer makkelijk',
+                    rating: '4.8/5'
+                }
+            ];
+            
+            return [...defaultRecipes, ...userRecipes];
+        }
+    </script>
+</body>
+</html>
