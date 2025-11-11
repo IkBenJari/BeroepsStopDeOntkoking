@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drankjes Recepten - Stop De Ontkoking</title>
+    <link rel="stylesheet" href="../styles/recepten.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="user">
+                <img src="../images/unknown-user.png" alt="User pictogram">
+                <p id="username">Gast</p>
+            </div>
+            <a href="homepage.html">Home</a>
+            <div class="search-container">
+                <input type="text" placeholder="Zoek recepten..." class="search-input" id="searchInput">
+                <button class="search-button" onclick="searchRecipes()">Zoek</button>
+            </div>
+            <a href="toevoegen.html">Recept Toevoegen</a>
+            <a href="../index.html">Uitloggen</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Drankjes Recepten</h1>
+            <p>Verfrissende en gezonde drankjes voor elke gelegenheid!</p>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" onclick="filterRecipes('all')">Alle</button>
+            <button class="filter-btn" onclick="filterRecipes('gezond')">Gezond</button>
+            <button class="filter-btn" onclick="filterRecipes('koud')">Koud</button>
+            <button class="filter-btn" onclick="filterRecipes('warm')">Warm</button>
+        </div>
+
+        <div class="recipes-grid" id="recipesGrid">
+            <div class="recipe-card" data-category="gezond koud">
+                <img src="../images/citroen-munt-drankje.webp" alt="Citroen Munt Water">
+                <div class="recipe-info">
+                    <h3>Citroen Munt Water</h3>
+                    <p>Verfrissend en detoxerend drankje perfect voor de zomer</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 5 min</span>
+                        <span>👥 4 glazen</span>
+                        <span>⭐ 4.7/5</span>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('citroen-munt')">Bekijk Recept</button>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="gezond koud">
+                <img src="../images/gezond-recept.jpg" alt="Groene Smoothie">
+                <div class="recipe-info">
+                    <h3>Groene Smoothie</h3>
+                    <p>Energiegevende smoothie vol vitaminen en mineralen</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 8 min</span>
+                        <span>👥 2 glazen</span>
+                        <span>⭐ 4.4/5</span>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('groene-smoothie')">Bekijk Recept</button>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="warm">
+                <img src="../images/gezond-recept.jpg" alt="Kruidenthee">
+                <div class="recipe-info">
+                    <h3>Zelfgemaakte Kruidenthee</h3>
+                    <p>Rustgevende thee met verse kruiden</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 10 min</span>
+                        <span>👥 2 koppen</span>
+                        <span>⭐ 4.6/5</span>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('kruidenthee')">Bekijk Recept</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../scripts/recepten.js"></script>
+</body>
+</html>

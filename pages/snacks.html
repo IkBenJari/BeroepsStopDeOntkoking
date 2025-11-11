@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snacks Recepten - Stop De Ontkoking</title>
+    <link rel="stylesheet" href="../styles/recepten.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="user">
+                <img src="../images/unknown-user.png" alt="User pictogram">
+                <p id="username">Gast</p>
+            </div>
+            <a href="homepage.html">Home</a>
+            <div class="search-container">
+                <input type="text" placeholder="Zoek recepten..." class="search-input" id="searchInput">
+                <button class="search-button" onclick="searchRecipes()">Zoek</button>
+            </div>
+            <a href="toevoegen.html">Recept Toevoegen</a>
+            <a href="../index.html">Uitloggen</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Snacks Recepten</h1>
+            <p>Gezonde en lekkere snacks voor tussendoor!</p>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" onclick="filterRecipes('all')">Alle</button>
+            <button class="filter-btn" onclick="filterRecipes('gezond')">Gezond</button>
+            <button class="filter-btn" onclick="filterRecipes('snel')">Snel & Makkelijk</button>
+            <button class="filter-btn" onclick="filterRecipes('hartig')">Hartig</button>
+        </div>
+
+        <div class="recipes-grid" id="recipesGrid">
+            <div class="recipe-card" data-category="gezond hartig">
+                <img src="../images/gezonde-wrap-rolletjes.jpg" alt="Wrap Rolletjes">
+                <div class="recipe-info">
+                    <h3>Gezonde Wrap Rolletjes</h3>
+                    <p>Kleurrijke wrap rolletjes gevuld met verse groenten</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 12 min</span>
+                        <span>👥 4 stuks</span>
+                        <span>⭐ 4.6/5</span>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('wrap-rolletjes')">Bekijk Recept</button>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="gezond snel">
+                <img src="../images/gezond-recept.jpg" alt="Energy Balls">
+                <div class="recipe-info">
+                    <h3>Energy Balls</h3>
+                    <p>Natuurlijke energieballetjes met noten en dadels</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 15 min</span>
+                        <span>👥 12 stuks</span>
+                        <span>⭐ 4.8/5</span>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('energy-balls')">Bekijk Recept</button>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="hartig snel">
+                <img src="../images/groente-achtergrond.jpg" alt="Groente Chips">
+                <div class="recipe-info">
+                    <h3>Zelfgemaakte Groente Chips</h3>
+                    <p>Knapperige chips van courgette, wortel en biet</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 25 min</span>
+                        <span>👥 2 porties</span>
+                        <span>⭐ 4.3/5</span>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('groente-chips')">Bekijk Recept</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../scripts/recepten.js"></script>
+</body>
+</html>
