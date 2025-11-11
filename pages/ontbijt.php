@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . '/../backend/functions_auth.php';
+$current_user = current_user();
+
+// Haal recepten uit database
+require_once __DIR__ . '/../backend/db.php';
+$stmt = $pdo->prepare('SELECT * FROM recipes WHERE category = :category ORDER BY created_at DESC');
+$stmt->execute(['category' => 'ontbijt']);
+$database_recipes = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -11,16 +21,20 @@
         <nav class="navbar">
             <div class="user">
                 <img src="../images/unknown-user.png" alt="User pictogram">
-                <p id="username">Gast</p>
+                <p><?php echo $current_user ? htmlspecialchars($current_user['username']) : 'Gast'; ?></p>
             </div>
-            <a href="homepage.html">Home</a>
+            <a href="../index.php">Home</a>
             <div class="search-container">
                 <input type="text" placeholder="Zoek recepten..." class="search-input" id="searchInput">
                 <button class="search-button" onclick="searchRecipes()">Zoek</button>
             </div>
-            <a href="toevoegen.html">Recept Toevoegen</a>
-            <a href="mijn-recepten.php">Mijn Recepten</a>
-            <a href="../index.html">Uitloggen</a>
+            <?php if ($current_user): ?>
+                <a href="toevoegen.php">Recept Toevoegen</a>
+                <a href="mijn-recepten.php">Mijn Recepten</a>
+                <a href="../backend/logout.php">Uitloggen</a>
+            <?php else: ?>
+                <a href="../backend/login.php">Inloggen</a>
+            <?php endif; ?>
         </nav>
     </header>
 
@@ -38,6 +52,7 @@
         </div>
 
         <div class="recipes-grid" id="recipesGrid">
+            <!-- Standaard recepten -->
             <div class="recipe-card" data-category="snel zoet">
                 <img src="../images/Pancake.jpg" alt="Pancakes">
                 <div class="recipe-info">
@@ -47,7 +62,6 @@
                         <span>⏱️ 15 min</span>
                         <span>👥 2 personen</span>
                         <span>⭐ 4.5/5</span>
-                        <button class="favorite-btn" onclick="toggleFavorite('pancakes')" id="fav-pancakes">♡</button>
                     </div>
                     <button class="view-recipe-btn" onclick="viewRecipe('pancakes')">Bekijk Recept</button>
                 </div>
@@ -62,7 +76,6 @@
                         <span>⏱️ 10 min</span>
                         <span>👥 1 persoon</span>
                         <span>⭐ 4.8/5</span>
-                        <button class="favorite-btn" onclick="toggleFavorite('acai-bowl')" id="fav-acai-bowl">♡</button>
                     </div>
                     <button class="view-recipe-btn" onclick="viewRecipe('acai-bowl')">Bekijk Recept</button>
                 </div>
@@ -77,24 +90,40 @@
                         <span>⏱️ 5 min</span>
                         <span>👥 1 persoon</span>
                         <span>⭐ 4.2/5</span>
-                        <button class="favorite-btn" onclick="toggleFavorite('ontbijt-wrap')" id="fav-ontbijt-wrap">♡</button>
                     </div>
                     <button class="view-recipe-btn" onclick="viewRecipe('ontbijt-wrap')">Bekijk Recept</button>
                 </div>
             </div>
+
+            <!-- Gebruikers recepten uit database -->
+            <?php foreach ($database_recipes as $recipe): ?>
+                <?php
+                $ingredients = json_decode($recipe['ingredients'], true) ?: [];
+                $instructions = json_decode($recipe['instructions'], true) ?: [];
+                ?>
+                <div class="recipe-card" data-category="user">
+                    <img src="../images/gezond-recept.jpg" alt="<?php echo htmlspecialchars($recipe['title']); ?>">
+                    <div class="recipe-info">
+                        <h3><?php echo htmlspecialchars($recipe['title']); ?></h3>
+                        <p><?php echo htmlspecialchars($recipe['description']); ?></p>
+                        <div class="recipe-meta">
+                            <span>⏱️ <?php echo htmlspecialchars($recipe['prep_time']); ?> min</span>
+                            <span>👥 <?php echo htmlspecialchars($recipe['servings']); ?> personen</span>
+                            <span>📊 <?php echo htmlspecialchars($recipe['difficulty']); ?></span>
+                        </div>
+                        <button class="view-recipe-btn" onclick="viewRecipe(<?php echo $recipe['id']; ?>)">Bekijk Recept</button>
+                        <small style="color: #666; font-style: italic; margin-top: 0.5rem; display: block;">
+                            Door gebruiker • <?php echo date('j M Y', strtotime($recipe['created_at'])); ?>
+                        </small>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </main>
 
     <script>
-        let currentUser = null;
-
-        // Laad gebruiker data en favorieten
+        // Check voor zoekterm
         document.addEventListener('DOMContentLoaded', function() {
-            loadUserData();
-            loadUserRecipes();
-            loadFavorites();
-            
-            // Check voor zoekterm
             const searchTerm = localStorage.getItem('searchTerm');
             if (searchTerm) {
                 document.getElementById('searchInput').value = searchTerm;
@@ -102,94 +131,6 @@
                 localStorage.removeItem('searchTerm');
             }
         });
-
-        function loadUserData() {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                document.getElementById('username').textContent = currentUser.voornaam || 'Gast';
-            }
-        }
-
-        function loadUserRecipes() {
-            const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
-            const ontbijtRecipes = userRecipes.filter(recipe => recipe.category === 'ontbijt');
-            
-            const recipesGrid = document.getElementById('recipesGrid');
-            
-            ontbijtRecipes.forEach(recipe => {
-                const recipeCard = document.createElement('div');
-                recipeCard.className = 'recipe-card';
-                recipeCard.setAttribute('data-category', 'user');
-                
-                recipeCard.innerHTML = `
-                    <img src="${recipe.image}" alt="${recipe.title}">
-                    <div class="recipe-info">
-                        <h3>${recipe.title}</h3>
-                        <p>${recipe.description}</p>
-                        <div class="recipe-meta">
-                            <span>⏱️ ${recipe.time}</span>
-                            <span>👥 ${recipe.servings}</span>
-                            <span>⭐ ${recipe.rating}</span>
-                            <button class="favorite-btn" onclick="toggleFavorite('${recipe.id}')" id="fav-${recipe.id}">♡</button>
-                        </div>
-                        <button class="view-recipe-btn" onclick="viewRecipe('${recipe.id}')">Bekijk Recept</button>
-                        <small style="color: #666; font-style: italic;">Door: ${recipe.author}</small>
-                    </div>
-                `;
-                
-                recipesGrid.appendChild(recipeCard);
-            });
-        }
-
-        function loadFavorites() {
-            if (!currentUser || !currentUser.favorites) return;
-            
-            currentUser.favorites.forEach(recipeId => {
-                const favBtn = document.getElementById(`fav-${recipeId}`);
-                if (favBtn) {
-                    favBtn.textContent = '❤️';
-                    favBtn.classList.add('favorited');
-                }
-            });
-        }
-
-        function toggleFavorite(recipeId) {
-            if (!currentUser || !currentUser.isLoggedIn) {
-                alert('Je moet ingelogd zijn om favorieten toe te voegen!');
-                return;
-            }
-
-            if (!currentUser.favorites) {
-                currentUser.favorites = [];
-            }
-
-            const favBtn = document.getElementById(`fav-${recipeId}`);
-            const isFavorited = currentUser.favorites.includes(recipeId);
-
-            if (isFavorited) {
-                // Verwijder van favorieten
-                currentUser.favorites = currentUser.favorites.filter(id => id !== recipeId);
-                favBtn.textContent = '♡';
-                favBtn.classList.remove('favorited');
-            } else {
-                // Voeg toe aan favorieten
-                currentUser.favorites.push(recipeId);
-                favBtn.textContent = '❤️';
-                favBtn.classList.add('favorited');
-            }
-
-            // Sla op in localStorage
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            // Update ook in registeredUsers
-            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-            const userIndex = registeredUsers.findIndex(user => user.id === currentUser.id);
-            if (userIndex !== -1) {
-                registeredUsers[userIndex].favorites = currentUser.favorites;
-                localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-            }
-        }
 
         function filterRecipes(category) {
             const cards = document.querySelectorAll('.recipe-card');
@@ -230,8 +171,7 @@
         }
 
         function viewRecipe(recipeId) {
-            localStorage.setItem('selectedRecipe', recipeId);
-            window.location.href = 'recept-detail.html';
+            window.location.href = 'recept-detail.php?id=' + recipeId;
         }
     </script>
 </body>

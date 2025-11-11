@@ -10,11 +10,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && $user['role'] === 'admin') {
             header('Location: admin/index.php');
         } else {
-            header('Location: ../index.php');
+            header('Location: /index.php');  // Absolute pad naar root index.php
         }
         exit;
     } else {
-        $error = 'Login mislukt';
+        $error = 'Onjuiste gebruikersnaam of wachtwoord';
     }
 }
 ?>
@@ -33,21 +33,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img src="../images/unknown-user.png" alt="User pictogram">
                 <p>Gast</p>
             </div>
-            <a href="../index.html">Home</a>
+            <a href="../index.php">Home</a>
             <div class="search-container">
                 <input type="text" placeholder="Zoek recepten..." class="search-input" disabled>
                 <button class="search-button" disabled>Zoek</button>
             </div>
             <a href="../pages/ontbijt.html">Recepten</a>
-            <a href="login.php" class="admin-login-btn active">Inloggen / Beheer</a>
+            <a href="login.php" class="admin-login-btn active">Inloggen</a>
         </nav>
     </header>
 
     <main>
         <div class="login-container">
             <div class="login-form">
-                <h1>Beheerder Inloggen</h1>
-                <p>Log in om recepten en gebruikers te beheren</p>
+                <h1>Inloggen</h1>
+                <p>Log in op je account om recepten toe te voegen en op te slaan</p>
                 
                 <?php if (!empty($error)): ?>
                     <div class="error-message">
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form method="post">
                     <div class="form-group">
                         <label for="username">Gebruikersnaam</label>
-                        <input type="text" id="username" name="username" required>
+                        <input type="text" id="username" name="username" required value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>">
                     </div>
                     
                     <div class="form-group">
@@ -70,8 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
                 
                 <div class="login-info">
-                    <p>Toegang alleen voor beheerders van Stop De Ontkoking</p>
-                    <p>Nog geen account? <a href="register.php">Registreer hier</a></p>
+                    <p>Nog geen account? <a href="register.php" class="register-link">Maak hier een account aan</a></p>
+                    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                    <p><small>Beheerders krijgen automatisch toegang tot het admin panel na het inloggen.</small></p>
                 </div>
             </div>
         </div>
@@ -85,9 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="footer-section">
                 <h3>Links</h3>
-                <a href="../index.html">Home</a>
+                <a href="../index.php">Home</a>
                 <a href="../pages/ontbijt.html">Recepten</a>
-                <a href="login.php">Beheer</a>
+                <a href="login.php">Inloggen</a>
             </div>
             <div class="footer-section">
                 <h3>Categorieën</h3>

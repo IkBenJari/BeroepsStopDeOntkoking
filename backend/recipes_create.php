@@ -2,17 +2,27 @@
 require_once __DIR__ . '/functions_auth.php';
 require_login(); // Alleen ingelogde gebruikers kunnen recepten aanmaken
 
-$config = require __DIR__ . '/config.php';
 $user = current_user();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
-    $ingredients = trim($_POST['ingredients'] ?? '');
-    $instructions = trim($_POST['instructions'] ?? '');
     $category = $_POST['category'] ?? '';
     $prep_time = (int)($_POST['prep_time'] ?? 0);
-    $cook_time = (int)($_POST['cook_time'] ?? 0);
+    $servings = (int)($_POST['servings'] ?? 1);
+    $difficulty = $_POST['difficulty'] ?? '';
+    
+    // Verwerk arrays voor ingrediënten en instructies
+    $ingredients = $_POST['ingredients'] ?? [];
+    $instructions = $_POST['instructions'] ?? [];
+    
+    // Filter lege waarden uit arrays
+    $ingredients = array_filter(array_map('trim', $ingredients), function($item) {
+        return !empty($item);
+    });
+    $instructions = array_filter(array_map('trim', $instructions), function($item) {
+        return !empty($item);
+    });
     
     $errors = [];
     
@@ -21,53 +31,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($ingredients)) $errors[] = 'Ingrediënten zijn verplicht';
     if (empty($instructions)) $errors[] = 'Bereidingswijze is verplicht';
     if (empty($category)) $errors[] = 'Categorie is verplicht';
-    
-    // Handle image upload
-    $image_path = null;
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
-        $file_type = $_FILES['image']['type'];
-        
-        if (!in_array($file_type, $allowed_types)) {
-            $errors[] = 'Alleen JPEG, PNG en WebP afbeeldingen zijn toegestaan';
-        } else {
-            $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-            $filename = uniqid('recipe_') . '.' . $extension;
-            $upload_path = $config['upload_dir'] . '/' . $filename;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)) {
-                $image_path = 'backend/uploads/' . $filename;
-            } else {
-                $errors[] = 'Fout bij uploaden van afbeelding';
-            }
-        }
-    }
+    if (empty($difficulty)) $errors[] = 'Moeilijkheidsgraad is verplicht';
+    if ($prep_time <= 0) $errors[] = 'Bereidingstijd moet minimaal 1 minuut zijn';
+    if ($servings <= 0) $errors[] = 'Aantal personen moet minimaal 1 zijn';
     
     if (empty($errors)) {
         try {
             require_once __DIR__ . '/db.php';
             
+            // Converteer arrays naar JSON voor opslag
+            $ingredients_json = json_encode($ingredients, JSON_UNESCAPED_UNICODE);
+            $instructions_json = json_encode($instructions, JSON_UNESCAPED_UNICODE);
+            
             $stmt = $pdo->prepare('
-                INSERT INTO recipes (title, description, ingredients, instructions, category, prep_time, cook_time, image_path, created_by, created_at) 
-                VALUES (:title, :description, :ingredients, :instructions, :category, :prep_time, :cook_time, :image_path, :created_by, NOW())
+                INSERT INTO recipes (title, description, ingredients, instructions, category, prep_time, servings, difficulty, created_by, created_at) 
+                VALUES (:title, :description, :ingredients, :instructions, :category, :prep_time, :servings, :difficulty, :created_by, datetime("now"))
             ');
             
             $stmt->execute([
                 'title' => $title,
                 'description' => $description,
-                'ingredients' => $ingredients,
-                'instructions' => $instructions,
+                'ingredients' => $ingredients_json,
+                'instructions' => $instructions_json,
                 'category' => $category,
                 'prep_time' => $prep_time,
-                'cook_time' => $cook_time,
-                'image_path' => $image_path,
+                'servings' => $servings,
+                'difficulty' => $difficulty,
                 'created_by' => $user['id']
             ]);
             
-            $success = 'Recept succesvol toegevoegd!';
-            // Reset form
-            $title = $description = $ingredients = $instructions = $category = '';
-            $prep_time = $cook_time = 0;
+            // Redirect naar hoofdpagina met success bericht
+            header('Location: ../index.php?success=recept_toegevoegd');
+            exit;
             
         } catch (Exception $e) {
             $errors[] = 'Database fout: ' . $e->getMessage();

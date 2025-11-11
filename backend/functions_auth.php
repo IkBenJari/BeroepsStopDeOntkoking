@@ -10,7 +10,18 @@ return isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
 function require_login() {
 if (!current_user()) {
-header('Location: /backend/login.php');
+// Bepaal het relatieve pad naar login.php vanuit de huidige locatie
+$script_path = $_SERVER['SCRIPT_NAME'];
+$script_dir = dirname($script_path);
+$relative_path = '';
+
+// Tel hoeveel niveaus diep we zijn
+$depth = substr_count(trim($script_dir, '/'), '/');
+for ($i = 0; $i < $depth; $i++) {
+    $relative_path .= '../';
+}
+
+header('Location: ' . $relative_path . 'backend/login.php');
 exit;
 }
 }

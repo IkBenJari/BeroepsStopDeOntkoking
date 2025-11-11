@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img src="../images/unknown-user.png" alt="User pictogram">
                 <p>Gast</p>
             </div>
-            <a href="../index.html">Home</a>
+            <a href="../index.php">Home</a>
             <div class="search-container">
                 <input type="text" placeholder="Zoek recepten..." class="search-input" disabled>
                 <button class="search-button" disabled>Zoek</button>
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="login-container">
             <div class="login-form">
                 <h1>Account Aanmaken</h1>
-                <p>Maak een account aan om recepten toe te voegen en op te slaan</p>
+                <p>Maak een gratis account aan om recepten toe te voegen en op te slaan</p>
                 
                 <?php if (!empty($error)): ?>
                     <div class="error-message">
@@ -58,32 +58,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if (!empty($success)): ?>
                     <div class="success-message">
                         <?php echo htmlspecialchars($success); ?>
-                        <p><a href="login.php">Klik hier om in te loggen</a></p>
+                        <p><strong><a href="login.php">Klik hier om in te loggen</a></strong></p>
                     </div>
                 <?php endif; ?>
                 
                 <form method="post">
                     <div class="form-group">
                         <label for="username">Gebruikersnaam</label>
-                        <input type="text" id="username" name="username" required value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>">
+                        <input type="text" id="username" name="username" required value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>" minlength="3">
+                        <small>Minimaal 3 karakters</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="password">Wachtwoord</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" id="password" name="password" required minlength="6">
                         <small>Minimaal 6 karakters</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="confirm_password">Wachtwoord bevestigen</label>
-                        <input type="password" id="confirm_password" name="confirm_password" required>
+                        <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
                     </div>
                     
                     <button type="submit" class="login-btn">Account Aanmaken</button>
                 </form>
                 
                 <div class="login-info">
-                    <p>Heb je al een account? <a href="login.php">Log hier in</a></p>
+                    <p>Heb je al een account? <a href="login.php" class="register-link">Log hier in</a></p>
+                    <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                    <p><small>Je account wordt direct geactiveerd na registratie.</small></p>
                 </div>
             </div>
         </div>
@@ -97,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="footer-section">
                 <h3>Links</h3>
-                <a href="../index.html">Home</a>
+                <a href="../index.php">Home</a>
                 <a href="../pages/ontbijt.html">Recepten</a>
                 <a href="login.php">Inloggen</a>
             </div>

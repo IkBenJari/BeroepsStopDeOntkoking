@@ -32,6 +32,7 @@ try {
         // Kolom bestaat al, dit is oké
     }
     
+    // Maak de recipes tabel met alle benodigde kolommen
     $pdo->exec("CREATE TABLE IF NOT EXISTS recipes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -39,9 +40,43 @@ try {
         ingredients TEXT,
         instructions TEXT,
         category TEXT,
+        prep_time INTEGER DEFAULT 0,
+        servings INTEGER DEFAULT 1,
+        difficulty TEXT,
         image_url TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        created_by INTEGER,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (created_by) REFERENCES users(id)
     )");
+    
+    // Voeg ontbrekende kolommen toe aan bestaande recipes tabel
+    $columns_to_add = [
+        'prep_time INTEGER DEFAULT 0',
+        'servings INTEGER DEFAULT 1',
+        'difficulty TEXT',
+        'created_by INTEGER'
+    ];
+    
+    foreach ($columns_to_add as $column) {
+        try {
+            $column_name = explode(' ', $column)[0];
+            $pdo->exec("ALTER TABLE recipes ADD COLUMN $column");
+        } catch (Exception $e) {
+            // Kolom bestaat al, dit is oké
+        }
+    }
+    
+    // Voeg standaard admin gebruiker toe als die nog niet bestaat
+    $stmt = $pdo->prepare('SELECT id FROM users WHERE username = :username');
+    $stmt->execute(['username' => 'admin']);
+    if (!$stmt->fetch()) {
+        $stmt = $pdo->prepare('INSERT INTO users (username, password, role) VALUES (:username, :password, :role)');
+        $stmt->execute([
+            'username' => 'admin',
+            'password' => password_hash('admin123', PASSWORD_DEFAULT),
+            'role' => 'admin'
+        ]);
+    }
     
 } catch (Exception $e) {
     http_response_code(500);
