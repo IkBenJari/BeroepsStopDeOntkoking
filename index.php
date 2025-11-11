@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/backend/functions_auth.php';
+$current_user = current_user();
+?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -11,19 +15,34 @@
         <nav class="navbar">
             <div class="user">
                 <img src="images/unknown-user.png" alt="User pictogram">
-                <p>Gast</p>
+                <?php if ($current_user): ?>
+                    <p><?php echo htmlspecialchars($current_user['username']); ?></p>
+                <?php else: ?>
+                    <p>Gast</p>
+                <?php endif; ?>
             </div>
-            <a href="index.html">Home</a>
+            <a href="index.php">Home</a>
             <div class="search-container">
                 <input type="text" placeholder="Zoek recepten..." class="search-input" id="searchInput">
                 <button class="search-button" onclick="searchAllRecipes()">Zoek</button>
             </div>
-            <a href="pages/ontbijt.html">Recepten</a>
-            <a href="backend/login.php" class="admin-login-btn">Inloggen / Beheer</a>
+            <a href="pages/ontbijt.php">Recepten</a>
+            <?php if ($current_user): ?>
+                <a href="pages/toevoegen.php" class="add-recipe-btn">Recept Toevoegen</a>
+                <a href="backend/logout.php" class="logout-btn">Uitloggen</a>
+            <?php else: ?>
+                <a href="backend/login.php" class="admin-login-btn">Inloggen / Beheer</a>
+            <?php endif; ?>
         </nav>
     </header>
 
     <main>
+        <?php if (isset($_GET['success']) && $_GET['success'] === 'recept_toegevoegd'): ?>
+            <div style="background: #d4edda; color: #155724; padding: 15px; margin: 20px auto; max-width: 800px; border-radius: 10px; text-align: center; border: 1px solid #c3e6cb;">
+                <strong>✅ Recept succesvol toegevoegd!</strong> Je kunt het nu terugvinden in de receptenlijst.
+            </div>
+        <?php endif; ?>
+        
         <div class="hero-section">
             <div class="hero-content">
                 <h1>Stop De Ontkoking!</h1>
@@ -55,7 +74,7 @@
             <p>Van ontbijt tot diner, van snacks tot drankjes - wij hebben het allemaal!</p>
             
             <div class="categories-grid">
-                <a href="pages/ontbijt.html" class="category-card">
+                <a href="pages/ontbijt.php" class="category-card">
                     <img src="images/Pancake.jpg" alt="Ontbijt">
                     <div class="category-overlay">
                         <h3>Ontbijt</h3>
@@ -63,7 +82,7 @@
                     </div>
                 </a>
 
-                <a href="pages/drankjes.html" class="category-card">
+                <a href="pages/drankjes.php" class="category-card">
                     <img src="images/citroen-munt-drankje.webp" alt="Drankjes">
                     <div class="category-overlay">
                         <h3>Drankjes</h3>
@@ -72,14 +91,14 @@
                 </a>
 
                 <a href="pages/snacks.html" class="category-card">
-                    <img src="images/gezonde-wrap-rolletjes.jpg" alt="Snacks">
+                    <img src="images/groente-achtergrond.jpg" alt="Snacks">
                     <div class="category-overlay">
                         <h3>Snacks</h3>
                         <p>Gezond tussendoortje</p>
                     </div>
                 </a>
 
-                <a href="pages/ontbijt.html" class="category-card">
+                <a href="pages/ontbijt.php" class="category-card">
                     <img src="images/groente-achtergrond.jpg" alt="Lunch">
                     <div class="category-overlay">
                         <h3>Lunch</h3>
@@ -87,7 +106,7 @@
                     </div>
                 </a>
 
-                <a href="pages/ontbijt.html" class="category-card">
+                <a href="pages/ontbijt.php" class="category-card">
                     <img src="images/gezond-recept.jpg" alt="Diner">
                     <div class="category-overlay">
                         <h3>Diner</h3>
@@ -95,7 +114,7 @@
                     </div>
                 </a>
 
-                <a href="pages/ontbijt.html" class="category-card">
+                <a href="pages/ontbijt.php" class="category-card">
                     <img src="images/Pancake.jpg" alt="Dessert">
                     <div class="category-overlay">
                         <h3>Dessert</h3>
@@ -147,14 +166,14 @@
             </div>
             <div class="footer-section">
                 <h3>Links</h3>
-                <a href="index.html">Home</a>
-                <a href="pages/ontbijt.html">Recepten</a>
+                <a href="index.php">Home</a>
+                <a href="pages/ontbijt.php">Recepten</a>
                 <a href="backend/login.php">Beheer</a>
             </div>
             <div class="footer-section">
                 <h3>Categorieën</h3>
-                <a href="pages/ontbijt.html">Ontbijt</a>
-                <a href="pages/drankjes.html">Drankjes</a>
+                <a href="pages/ontbijt.php">Ontbijt</a>
+                <a href="pages/drankjes.php">Drankjes</a>
                 <a href="pages/snacks.html">Snacks</a>
             </div>
         </div>
@@ -208,13 +227,12 @@
             const searchTerm = document.getElementById('searchInput').value.trim();
             if (searchTerm) {
                 localStorage.setItem('searchTerm', searchTerm);
-                window.location.href = 'pages/ontbijt.html';
+                window.location.href = 'pages/ontbijt.php';
             }
         }
 
         function viewRecipe(recipeId) {
-            localStorage.setItem('selectedRecipe', recipeId);
-            window.location.href = 'pages/recept-detail.html';
+            window.location.href = 'pages/recept-detail.php?id=' + recipeId;
         }
     </script>
 </body>

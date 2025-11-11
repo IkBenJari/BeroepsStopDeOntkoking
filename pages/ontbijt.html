@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontbijt Recepten - Stop De Ontkoking</title>
+    <link rel="stylesheet" href="../styles/recepten.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="user">
+                <img src="../images/unknown-user.png" alt="User pictogram">
+                <p id="username">Gast</p>
+            </div>
+            <a href="homepage.html">Home</a>
+            <div class="search-container">
+                <input type="text" placeholder="Zoek recepten..." class="search-input" id="searchInput">
+                <button class="search-button" onclick="searchRecipes()">Zoek</button>
+            </div>
+            <a href="toevoegen.html">Recept Toevoegen</a>
+            <a href="mijn-recepten.php">Mijn Recepten</a>
+            <a href="../index.html">Uitloggen</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Ontbijt Recepten</h1>
+            <p>Start je dag goed met deze heerlijke ontbijtrecepten!</p>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-btn active" onclick="filterRecipes('all')">Alle</button>
+            <button class="filter-btn" onclick="filterRecipes('gezond')">Gezond</button>
+            <button class="filter-btn" onclick="filterRecipes('snel')">Snel & Makkelijk</button>
+            <button class="filter-btn" onclick="filterRecipes('zoet')">Zoet</button>
+        </div>
+
+        <div class="recipes-grid" id="recipesGrid">
+            <div class="recipe-card" data-category="snel zoet">
+                <img src="../images/Pancake.jpg" alt="Pancakes">
+                <div class="recipe-info">
+                    <h3>Fluffy Pancakes</h3>
+                    <p>Heerlijke fluffy pancakes perfect voor een weekend ontbijt</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 15 min</span>
+                        <span>👥 2 personen</span>
+                        <span>⭐ 4.5/5</span>
+                        <button class="favorite-btn" onclick="toggleFavorite('pancakes')" id="fav-pancakes">♡</button>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('pancakes')">Bekijk Recept</button>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="gezond">
+                <img src="../images/gezond-recept.jpg" alt="Gezonde Bowl">
+                <div class="recipe-info">
+                    <h3>Acai Bowl</h3>
+                    <p>Een gezonde en kleurrijke start van de dag vol vitaminen</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 10 min</span>
+                        <span>👥 1 persoon</span>
+                        <span>⭐ 4.8/5</span>
+                        <button class="favorite-btn" onclick="toggleFavorite('acai-bowl')" id="fav-acai-bowl">♡</button>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('acai-bowl')">Bekijk Recept</button>
+                </div>
+            </div>
+
+            <div class="recipe-card" data-category="snel">
+                <img src="../images/gezonde-wrap-rolletjes.jpg" alt="Ontbijt Wrap">
+                <div class="recipe-info">
+                    <h3>Ontbijt Wrap</h3>
+                    <p>Snelle en voedzame wrap perfect voor onderweg</p>
+                    <div class="recipe-meta">
+                        <span>⏱️ 5 min</span>
+                        <span>👥 1 persoon</span>
+                        <span>⭐ 4.2/5</span>
+                        <button class="favorite-btn" onclick="toggleFavorite('ontbijt-wrap')" id="fav-ontbijt-wrap">♡</button>
+                    </div>
+                    <button class="view-recipe-btn" onclick="viewRecipe('ontbijt-wrap')">Bekijk Recept</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentUser = null;
+
+        // Laad gebruiker data en favorieten
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            loadUserRecipes();
+            loadFavorites();
+            
+            // Check voor zoekterm
+            const searchTerm = localStorage.getItem('searchTerm');
+            if (searchTerm) {
+                document.getElementById('searchInput').value = searchTerm;
+                searchRecipes();
+                localStorage.removeItem('searchTerm');
+            }
+        });
+
+        function loadUserData() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                document.getElementById('username').textContent = currentUser.voornaam || 'Gast';
+            }
+        }
+
+        function loadUserRecipes() {
+            const userRecipes = JSON.parse(localStorage.getItem('userRecipes') || '[]');
+            const ontbijtRecipes = userRecipes.filter(recipe => recipe.category === 'ontbijt');
+            
+            const recipesGrid = document.getElementById('recipesGrid');
+            
+            ontbijtRecipes.forEach(recipe => {
+                const recipeCard = document.createElement('div');
+                recipeCard.className = 'recipe-card';
+                recipeCard.setAttribute('data-category', 'user');
+                
+                recipeCard.innerHTML = `
+                    <img src="${recipe.image}" alt="${recipe.title}">
+                    <div class="recipe-info">
+                        <h3>${recipe.title}</h3>
+                        <p>${recipe.description}</p>
+                        <div class="recipe-meta">
+                            <span>⏱️ ${recipe.time}</span>
+                            <span>👥 ${recipe.servings}</span>
+                            <span>⭐ ${recipe.rating}</span>
+                            <button class="favorite-btn" onclick="toggleFavorite('${recipe.id}')" id="fav-${recipe.id}">♡</button>
+                        </div>
+                        <button class="view-recipe-btn" onclick="viewRecipe('${recipe.id}')">Bekijk Recept</button>
+                        <small style="color: #666; font-style: italic;">Door: ${recipe.author}</small>
+                    </div>
+                `;
+                
+                recipesGrid.appendChild(recipeCard);
+            });
+        }
+
+        function loadFavorites() {
+            if (!currentUser || !currentUser.favorites) return;
+            
+            currentUser.favorites.forEach(recipeId => {
+                const favBtn = document.getElementById(`fav-${recipeId}`);
+                if (favBtn) {
+                    favBtn.textContent = '❤️';
+                    favBtn.classList.add('favorited');
+                }
+            });
+        }
+
+        function toggleFavorite(recipeId) {
+            if (!currentUser || !currentUser.isLoggedIn) {
+                alert('Je moet ingelogd zijn om favorieten toe te voegen!');
+                return;
+            }
+
+            if (!currentUser.favorites) {
+                currentUser.favorites = [];
+            }
+
+            const favBtn = document.getElementById(`fav-${recipeId}`);
+            const isFavorited = currentUser.favorites.includes(recipeId);
+
+            if (isFavorited) {
+                // Verwijder van favorieten
+                currentUser.favorites = currentUser.favorites.filter(id => id !== recipeId);
+                favBtn.textContent = '♡';
+                favBtn.classList.remove('favorited');
+            } else {
+                // Voeg toe aan favorieten
+                currentUser.favorites.push(recipeId);
+                favBtn.textContent = '❤️';
+                favBtn.classList.add('favorited');
+            }
+
+            // Sla op in localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Update ook in registeredUsers
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const userIndex = registeredUsers.findIndex(user => user.id === currentUser.id);
+            if (userIndex !== -1) {
+                registeredUsers[userIndex].favorites = currentUser.favorites;
+                localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            }
+        }
+
+        function filterRecipes(category) {
+            const cards = document.querySelectorAll('.recipe-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    const cardCategories = card.getAttribute('data-category');
+                    if (cardCategories && cardCategories.includes(category)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        function searchRecipes() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.recipe-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function viewRecipe(recipeId) {
+            localStorage.setItem('selectedRecipe', recipeId);
+            window.location.href = 'recept-detail.html';
+        }
+    </script>
+</body>
+</html>
